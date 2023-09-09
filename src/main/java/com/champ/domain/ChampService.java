@@ -42,4 +42,12 @@ public class ChampService {
             throw new RuntimeException("Não foi possível atualizar o registro");
         }
     }
+
+    public void deleteChamp(Long id){
+        if(repository.existsById(id)){
+            repository.deleteById(id);   
+        }else{
+            throw new RuntimeException("Registro não encontrado");
+        }
+    }
 }
