@@ -24,4 +24,22 @@ public class ChampService {
         Assert.isNull(champ.getId(), "Registro não encontrado");
         return repository.save(champ);
     }
+
+    public Champ updateChamp(Champ champ, Long id){
+        Optional<Champ> optional = repository.findById(id);
+
+        if(optional.isPresent()){
+            Champ db = optional.get();
+
+            db.setName(champ.getName());
+            db.setRole(champ.getRole());
+            db.setType(champ.getType());
+
+            repository.save(db);
+
+            return db;
+        }else{
+            throw new RuntimeException("Não foi possível atualizar o registro");
+        }
+    }
 }
