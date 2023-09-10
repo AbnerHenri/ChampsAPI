@@ -45,6 +45,14 @@ public class indexController {
                 ResponseEntity.ok(champ);
     }
 
+    @GetMapping("/type/{type}")
+    public ResponseEntity<List<Champ>> showTypes(@PathVariable String type){
+        List<Champ> champ = service.getChampByType(type);
+        return champ.isEmpty() ?
+                ResponseEntity.notFound().build() :
+                ResponseEntity.ok(champ);
+    }
+
     @PostMapping
     public ResponseEntity<String> addChamp(@RequestBody Champ champ){
         service.addChamp(champ);

@@ -25,6 +25,10 @@ public class ChampService {
         return repository.findByRole(role);
     }
 
+    public List<Champ> getChampByType(String type){
+        return repository.findByType(type);
+    }
+
     public Champ addChamp(Champ champ){
         Assert.isNull(champ.getId(), "Registro não encontrado");
         return repository.save(champ);
