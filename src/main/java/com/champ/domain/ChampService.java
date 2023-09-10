@@ -1,5 +1,6 @@
 package com.champ.domain;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class ChampService {
 
     public Optional<Champ> getChampById(Long id){
         return repository.findById(id);
+    }
+
+    public List<Champ> getChampByRole(String role){
+        return repository.findByRole(role);
     }
 
     public Champ addChamp(Champ champ){

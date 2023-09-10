@@ -1,8 +1,10 @@
 package com.champ.api;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,30 +25,41 @@ public class indexController {
     private ChampService service;
 
     @GetMapping
-    public Iterable<Champ> showChamps(){
-        return service.getChamps();
+    public ResponseEntity<Iterable<Champ>> showChamps(){
+        return ResponseEntity.ok(service.getChamps());
     }
 
     @GetMapping("/champ/{id}")
-    public Optional<Champ> showChamp(@PathVariable Long id){
-        return service.getChampById(id);
+    public ResponseEntity<Champ> showChamp(@PathVariable Long id){
+        Optional<Champ> champ = service.getChampById(id);
+        return champ
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/role/{role}")
+    public ResponseEntity<List<Champ>> showRoles(@PathVariable String role){
+        List<Champ> champ = service.getChampByRole(role);
+        return champ.isEmpty() ?
+                ResponseEntity.noContent().build() :
+                ResponseEntity.ok(champ);
     }
 
     @PostMapping
-    public String addChamp(@RequestBody Champ champ){
+    public ResponseEntity<String> addChamp(@RequestBody Champ champ){
         service.addChamp(champ);
-        return "Campeão Adicionado";
+        return ResponseEntity.ok("Campeão Adicionado");
     }
 
     @PutMapping("/champ/{id}")
-    public String editChamp(@RequestBody Champ champ, @PathVariable Long id){
+    public ResponseEntity<String> editChamp(@RequestBody Champ champ, @PathVariable Long id){
         service.updateChamp(champ, id);
-        return "Champ Editado";
+        return ResponseEntity.ok("Champ Editado");
     }
 
     @DeleteMapping("/champ/{id}")
-    public String deleteChamp(@PathVariable Long id){
+    public ResponseEntity<String> deleteChamp(@PathVariable Long id){
         service.deleteChamp(id);
-        return "Champ Deletado";
+        return ResponseEntity.ok("Champ Deletado");
     }
 }
